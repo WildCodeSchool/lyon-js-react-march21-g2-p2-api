@@ -1,0 +1,50 @@
+{
+  "name": "lyon-js-react-march21-g2-p2-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.0",
+    "bluebird": "^3.7.2",
+    "eslint-plugin-react": "^7.23.2",
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "start": "start",
+    "build": "build",
+    "test": "test",
+    "eject": "eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md|vue)\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api/issues"
+  },
+  "homepage": "https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
+    "typescript": "^4.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm-run-all format lint:fix"
+    }
+  }
+}
