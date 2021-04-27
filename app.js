@@ -21,27 +21,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const students = [
-  { lastName: 'BERDALA', firstName: 'Doriane' },
-  { lastName: 'BOUTRIG', firstName: 'Youcef' },
-  { lastName: 'DUBOIS', firstName: 'Cécile' },
-  { lastName: 'GATTO', firstName: 'Ornella' },
-  { lastName: 'GERARD', firstName: 'Solène' },
-  { lastName: 'JAIMOND', firstName: 'Florian' },
-  { lastName: 'JESUS', firstName: 'Nelson' },
-  { lastName: 'KAMALO', firstName: 'Herança' },
-  { lastName: 'MISSET', firstName: 'Edouard' },
-  { lastName: 'MONGE', firstName: 'Brandon' },
-  { lastName: 'REDONDO', firstName: 'Benoit' },
-  { lastName: 'SCHNUR', firstName: 'Priscilia' },
-  { lastName: 'GABORIT', firstName: 'Jonathan' },
-  { lastName: 'MAUPIED', firstName: 'Joris' },
-];
-
-app.get('/students', (req, res) => {
-  res.json(students);
-});
-
 // server setup
 app.listen(PORT, () => {
   if (!inTestEnv) {
