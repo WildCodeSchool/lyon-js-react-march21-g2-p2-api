@@ -1,5 +1,5 @@
 --@block : Resest the reviews table (tmdb_id, title & comment, user_name)
-USE DATABASE dolly;
+USE dolly;
 DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` (
   `id` INT NOT NULL AUTO_INCREMENT,
