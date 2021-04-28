@@ -1,0 +1,38 @@
+{
+  "name": "lyon-js-react-march21-g2-p2-api",
+  "version": "1.0.0",
+  "description": "The back-end of Dolly-The-Sheep's project",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "mysql2": "^2.2.5"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "start:watch": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api/issues"
+  },
+  "homepage": "https://github.com/WildCodeSchool/lyon-js-react-march21-g2-p2-api#readme",
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.5",
+    "husky": "^6.0.0",
+    "nodemon": "^2.0.7"
+  }
+}
