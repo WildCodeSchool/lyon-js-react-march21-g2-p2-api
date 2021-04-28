@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const joi = require('joi');
+const nodemailer = require('nodemailer');
 const connection = require('./db-config');
 const { PORT, CORS_ALLOWED_ORIGINS, inTestEnv } = require('./env');
-const nodemailer = require('nodemailer');
+
 
 
 const app = express();
@@ -144,7 +145,7 @@ app.post('/contact', (req, res) => {
   `
   //------------Create a SMTP transporter object----------------------//
 
-  let transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
     secure: true,
@@ -154,27 +155,22 @@ app.post('/contact', (req, res) => {
     },
   });
 
-  module.exports = transporter;
 
-  let message = {
 
+  const message = {
     from: `projectdollyx@gmail.com`,
     to: `${req.body.email}, projectdollyx@gmail.com`,
     subject: 'test send message',
     text: 'Hello World',
     html: htmlOutput,
   };
-
   transporter.sendMail(message, (err, info) => {
     if (err) {
       console.log('Error occurred. ' + err.message);
-
       res.sendStatus(500);
     } else {
       console.log('Message sent: %s', info.messageId);
       res.sendStatus(200);
     }
-
-
   });
 });
