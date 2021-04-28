@@ -159,7 +159,7 @@ app.post('/contact', (req, res) => {
   let message = {
 
     from: `projectdollyx@gmail.com`,
-    to: 'projectdollyx@gmail.com',
+    to: `${req.body.email}, projectdollyx@gmail.com`,
     subject: 'test send message',
     text: 'Hello World',
     html: htmlOutput,
