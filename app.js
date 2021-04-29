@@ -79,13 +79,13 @@ app.get('/movies/:tmdb_id/reviews', (req, res) => {
 
 // Add a review to a movie
 app.post('/movies/:tmdb_id/reviews', (req, res) => {
-  const { title, userName, comment } = req.body;
+  const { title, user_name, comment } = req.body;
   const { tmdb_id } = req.params;
   connection
     .promise()
     .query(
       'INSERT INTO reviews (title, tmdb_id, comment, user_name) VALUES (?, ?, ?, ?)',
-      [title, tmdb_id, comment, userName]
+      [title, tmdb_id, comment, user_name]
     )
     .then(([results]) => {
       const newComment = {
@@ -93,7 +93,7 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
         title,
         tmdb_id,
         comment,
-        userName,
+        user_name,
       };
       res.send(newComment);
     })
