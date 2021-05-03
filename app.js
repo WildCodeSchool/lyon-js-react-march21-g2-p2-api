@@ -95,30 +95,3 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
       res.sendStatus(500);
     });
 });
-
-/* PATCH method to update a movie review
-app.patch('/reviews/:tmdb_id', (req, res) => {
-  let validationErrors = null;
-  let existingReviews = null;
-  connection
-    .promise()
-    .query('SELECT * FROM reviews WHERE tmdb_id = ?', [req.params.id])
-    .then(([results]) => {
-      existingReviews = results;
-      if (!existingReviews)
-        return Promise.reject(new Error('RECORD_NOT_FOUND'));
-      validationErrors = joi
-        .object({
-          user_name: joi.string().require().max(100),
-          comment: joi.string().require(),
-          tmdb_id: joi.number().required(),
-          title: joi.string().required().max(100),
-        })
-        .validate(req.body, { abortEarly: false }).error;
-      if (validationErrors) return Promise.reject(new Error('INVALID_DATA'));
-      return connection
-        .promise()
-        .query('UPDATE reviews SET ? WHERE if = ?', [req.body, req.params.id]);
-    });
-  then(() => res.json({ ...existingReviews, ...req.body }));
-}); */
