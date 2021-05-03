@@ -160,8 +160,7 @@ app.post('/contact', (req, res) => {
   const message = {
     from: `projectdollyx@gmail.com`,
     to: `${req.body.email}, projectdollyx@gmail.com`,
-    subject: 'test send message',
-    text: 'Hello World',
+    subject: 'Thanks for your inquiry',
     html: htmlOutput,
   };
   transporter.sendMail(message, (err, info) => {
