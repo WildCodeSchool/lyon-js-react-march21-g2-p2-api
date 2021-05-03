@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const joi = require('joi');
+const nodemailer = require('nodemailer');
 const connection = require('./db-config');
 const { PORT, CORS_ALLOWED_ORIGINS, inTestEnv } = require('./env');
 
@@ -94,4 +95,47 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
       console.error(err);
       res.sendStatus(500);
     });
+});
+
+//-------------Created structure for the message---------------//
+app.post('/contact', (req, res) => {
+  const htmlOutput = `
+
+<h3>Reply to :</h3>
+<p>${req.body.email}</p>
+<h3>you have recevied a message from : </h3>
+<h4> ${req.body.firstName}, ${req.body.lastName}</h4>
+<h3>Message :</h3>
+---------------------------
+  <p>${req.body.text}<p>
+---------------------------
+  `;
+  //------------Create a SMTP transporter object----------------------//
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: true,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+
+  const message = {
+    from: `projectdollyx@gmail.com`,
+    to: `${req.body.email}, projectdollyx@gmail.com`,
+    subject: 'test send message',
+    text: 'Hello World',
+    html: htmlOutput,
+  };
+  transporter.sendMail(message, (err, info) => {
+    if (err) {
+      console.log('Error occurred. ' + err.message);
+      res.sendStatus(500);
+    } else {
+      console.log('Message sent: %s', info.messageId);
+      res.sendStatus(200);
+    }
+  });
 });
