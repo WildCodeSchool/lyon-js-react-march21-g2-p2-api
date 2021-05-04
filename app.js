@@ -101,11 +101,17 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
 //-------------Created structure for the message---------------//
 app.post('/contact', (req, res) => {
   const htmlOutput = `
-    <p>Hi <strong>${req.body.firstName}<strong>,</p>
+    <p>Hi ${req.body.firstName}</p>
     <p>Thank you so much for reaching out.</p>
     <p>We received your email and someone from our team will be in touch soon.</p>
     <p>Best,</p> 
-    <h4>The Dolly Team</h4>`;
+    <h4>The Dolly Team</h4>
+    ---------------------------   
+    <h4>Reply to : ${req.body.firstName} ${req.body.lastName}</h4>
+    <p>${req.body.email}</p>
+    <h3>Message :</h3>
+    <p>${req.body.text}<p></p>
+    ---------------------------`;
 
   //------------Create a SMTP transporter object----------------------//
 
@@ -127,7 +133,13 @@ app.post('/contact', (req, res) => {
     Thank you for reaching out.
     We received your email and someone from our team will be in touch soon.
     Best, 
-    The Dolly Team`,
+    The Dolly Team
+    ---------------------------   
+    Reply to : ${req.body.firstName} ${req.body.lastName}
+    ${req.body.email}
+    Message :
+    ${req.body.text}
+    ---------------------------`,
     html: htmlOutput,
   };
 
