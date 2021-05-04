@@ -98,9 +98,9 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
 });
 
 //-------------Created structure for the message---------------//
+
 app.post('/contact', (req, res) => {
   const htmlOutput = `
-
 <h3>Reply to :</h3>
 <p>${req.body.email}</p>
 <h3>you have recevied a message from : </h3>
