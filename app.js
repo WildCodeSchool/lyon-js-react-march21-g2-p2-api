@@ -55,8 +55,7 @@ process.on('beforeExit', () => {
   });
 });
 
-// Retrieve all reviews from an id
-
+// Retrieve all reviews for a movie
 app.get('/movies/:tmdb_id/reviews', (req, res) => {
   const { tmdb_id } = req.params;
   connection
