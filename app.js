@@ -6,8 +6,6 @@ const nodemailer = require('nodemailer');
 const connection = require('./db-config');
 const { PORT, CORS_ALLOWED_ORIGINS, inTestEnv } = require('./env');
 
-
-
 const app = express();
 app.use(express.json());
 
@@ -59,9 +57,6 @@ process.on('beforeExit', () => {
 
 // Retrieve all reviews from an id
 
-
-
-
 app.get('/movies/:tmdb_id/reviews', (req, res) => {
   const { tmdb_id } = req.params;
   connection
@@ -77,58 +72,45 @@ app.get('/movies/:tmdb_id/reviews', (req, res) => {
     });
 });
 
-// Add a review to a movie
+//Add a review to a movie
+
 app.post('/movies/:tmdb_id/reviews', (req, res) => {
   const { title, user_name, comment } = req.body;
   const { tmdb_id } = req.params;
-  connection
-    .promise()
-    .query(
-      'INSERT INTO reviews (title, tmdb_id, comment, user_name) VALUES (?, ?, ?, ?)',
-      [title, tmdb_id, comment, user_name]
-    )
-    .then(([results]) => {
-      const newComment = {
-        id: results.insertId,
-        title,
-        tmdb_id,
-        comment,
-        user_name,
-      };
-      res.send(newComment);
+  const { error: validationErrors } = joi
+    .object({
+      title: joi.string().max(100).required(),
+      tmdb_id: joi.number().required(),
+      comment: joi.string().required(),
+      user_name: joi.string().max(50).required(),
     })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
-});
+    .validate({ title, tmdb_id, comment, user_name }, { abortEarly: false });
 
-/* PATCH method to update a movie review
-app.patch('/reviews/:tmdb_id', (req, res) => {
-  let validationErrors = null;
-  let existingReviews = null;
-  connection
-    .promise()
-    .query('SELECT * FROM reviews WHERE tmdb_id = ?', [req.params.id])
-    .then(([results]) => {
-      existingReviews = results;
-      if (!existingReviews)
-        return Promise.reject(new Error('RECORD_NOT_FOUND'));
-      validationErrors = joi
-        .object({
-          user_name: joi.string().require().max(100),
-          comment: joi.string().require(),
-          tmdb_id: joi.number().required(),
-          title: joi.string().required().max(100),
-        })
-        .validate(req.body, { abortEarly: false }).error;
-      if (validationErrors) return Promise.reject(new Error('INVALID_DATA'));
-      return connection
-        .promise()
-        .query('UPDATE reviews SET ? WHERE if = ?', [req.body, req.params.id]);
-    });
-  then(() => res.json({ ...existingReviews, ...req.body }));
-}); */
+  if (validationErrors) {
+    res.status(422).json({ errors: validationErrors.details });
+  } else {
+    connection
+      .promise()
+      .query(
+        'INSERT INTO reviews (title, tmdb_id, comment, user_name) VALUES (?, ?, ?, ?)',
+        [title, tmdb_id, comment, user_name]
+      )
+      .then(([results]) => {
+        const newComment = {
+          id: results.insertId,
+          title,
+          tmdb_id,
+          comment,
+          user_name,
+        };
+        res.send(newComment);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  }
+});
 
 //-------------Created structure for the message---------------//
 app.post('/contact', (req, res) => {
@@ -142,7 +124,7 @@ app.post('/contact', (req, res) => {
 ---------------------------
   <p>${req.body.text}<p>
 ---------------------------
-  `
+  `;
   //------------Create a SMTP transporter object----------------------//
 
   const transporter = nodemailer.createTransport({
@@ -154,8 +136,6 @@ app.post('/contact', (req, res) => {
       pass: process.env.SMTP_PASSWORD,
     },
   });
-
-
 
   const message = {
     from: `projectdollyx@gmail.com`,
