@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const joi = require('joi');
+const Joi = require('joi');
 const nodemailer = require('nodemailer');
 const connection = require('./db-config');
 const { PORT, CORS_ALLOWED_ORIGINS, inTestEnv } = require('./env');
@@ -55,8 +55,6 @@ process.on('beforeExit', () => {
   });
 });
 
-// Retrieve all reviews from an id
-
 app.get('/movies/:tmdb_id/reviews', (req, res) => {
   const { tmdb_id } = req.params;
   connection
@@ -72,33 +70,44 @@ app.get('/movies/:tmdb_id/reviews', (req, res) => {
     });
 });
 
-// Add a review to a movie
+//Add a review to a movie
+
 app.post('/movies/:tmdb_id/reviews', (req, res) => {
   const { title, user_name, comment } = req.body;
   const { tmdb_id } = req.params;
-  connection
-    .promise()
-    .query(
-      'INSERT INTO reviews (title, tmdb_id, comment, user_name) VALUES (?, ?, ?, ?)',
-      [title, tmdb_id, comment, user_name]
-    )
-    .then(([results]) => {
-      const newComment = {
-        id: results.insertId,
-        title,
-        tmdb_id,
-        comment,
-        user_name,
-      };
-      res.send(newComment);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  const { error: validationErrors } = Joi.object({
+    user_name: Joi.string().min(2).max(50).required(),
+    comment: Joi.string().min(2).required(),
+  }).validate({ user_name, comment }, { abortEarly: false });
+
+  if (validationErrors) {
+    res.status(422).send({ error: validationErrors.details });
+  } else {
+    connection
+      .promise()
+      .query(
+        'INSERT INTO reviews (title, tmdb_id, comment, user_name) VALUES (?, ?, ?, ?)',
+        [title, tmdb_id, comment, user_name]
+      )
+      .then(([results]) => {
+        const newComment = {
+          id: results.insertId,
+          title,
+          tmdb_id,
+          comment,
+          user_name,
+        };
+        res.send(newComment);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  }
 });
 
 //-------------Created structure for the message---------------//
+
 app.post('/contact', (req, res) => {
   const htmlOutput = `
     <p>Hi ${req.body.firstName}</p>
@@ -112,6 +121,17 @@ app.post('/contact', (req, res) => {
     <h3>Message :</h3>
     <p>${req.body.text}<p></p>
     ---------------------------`;
+
+=======
+<h3>Reply to :</h3>
+<p>${req.body.email}</p>
+<h3>you have recevied a message from : </h3>
+<h4> ${req.body.firstName}, ${req.body.lastName}</h4>
+<h3>Message :</h3>
+---------------------------
+  <p>${req.body.text}<p>
+---------------------------
+  `;
 
   //------------Create a SMTP transporter object----------------------//
 
