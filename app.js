@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const joi = require('joi');
+const Joi = require('joi');
 const nodemailer = require('nodemailer');
 const connection = require('./db-config');
 const { PORT, CORS_ALLOWED_ORIGINS, inTestEnv } = require('./env');
@@ -77,17 +77,14 @@ app.get('/movies/:tmdb_id/reviews', (req, res) => {
 app.post('/movies/:tmdb_id/reviews', (req, res) => {
   const { title, user_name, comment } = req.body;
   const { tmdb_id } = req.params;
-  const { error: validationErrors } = joi
-    .object({
-      title: joi.string().max(100).required(),
-      tmdb_id: joi.number().required(),
-      comment: joi.string().required(),
-      user_name: joi.string().max(50).required(),
-    })
-    .validate({ title, tmdb_id, comment, user_name }, { abortEarly: false });
+
+  const { error: validationErrors } = Joi.object({
+    user_name: Joi.string().min(2).max(50).required(),
+    comment: Joi.string().min(2).required(),
+  }).validate({ user_name, comment }, { abortEarly: false });
 
   if (validationErrors) {
-    res.status(422).json({ errors: validationErrors.details });
+    res.status(422).send({ error: validationErrors.details });
   } else {
     connection
       .promise()
