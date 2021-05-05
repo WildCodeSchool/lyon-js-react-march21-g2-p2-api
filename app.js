@@ -55,8 +55,8 @@ process.on('beforeExit', () => {
   });
 });
 
-// Retrieve all reviews from an id
 
+// Retrieve all reviews for a movie
 app.get('/movies/:tmdb_id/reviews', (req, res) => {
   const { tmdb_id } = req.params;
   connection
@@ -110,9 +110,9 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
 });
 
 //-------------Created structure for the message---------------//
+
 app.post('/contact', (req, res) => {
   const htmlOutput = `
-
 <h3>Reply to :</h3>
 <p>${req.body.email}</p>
 <h3>you have recevied a message from : </h3>
