@@ -112,16 +112,18 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
 //-------------Created structure for the message---------------//
 app.post('/contact', (req, res) => {
   const htmlOutput = `
+    <p>Hi ${req.body.firstName}</p>
+    <p>Thank you so much for reaching out.</p>
+    <p>We received your email and someone from our team will be in touch soon.</p>
+    <p>Best,</p> 
+    <h4>The Dolly Team</h4>
+    ---------------------------   
+    <h4>Reply to : ${req.body.firstName} ${req.body.lastName}</h4>
+    <p>${req.body.email}</p>
+    <h3>Message :</h3>
+    <p>${req.body.text}<p></p>
+    ---------------------------`;
 
-<h3>Reply to :</h3>
-<p>${req.body.email}</p>
-<h3>you have recevied a message from : </h3>
-<h4> ${req.body.firstName}, ${req.body.lastName}</h4>
-<h3>Message :</h3>
----------------------------
-  <p>${req.body.text}<p>
----------------------------
-  `;
   //------------Create a SMTP transporter object----------------------//
 
   const transporter = nodemailer.createTransport({
@@ -136,11 +138,22 @@ app.post('/contact', (req, res) => {
 
   const message = {
     from: `projectdollyx@gmail.com`,
-    to: `${req.body.email}, projectdollyx@gmail.com`,
-    subject: 'test send message',
-    text: 'Hello World',
+    bcc: `${req.body.email}, projectdollyx@gmail.com`,
+    subject: 'We got it',
+    text: `Hi ${req.body.firstName}, 
+    Thank you for reaching out.
+    We received your email and someone from our team will be in touch soon.
+    Best, 
+    The Dolly Team
+    ---------------------------   
+    Reply to : ${req.body.firstName} ${req.body.lastName}
+    ${req.body.email}
+    Message :
+    ${req.body.text}
+    ---------------------------`,
     html: htmlOutput,
   };
+
   transporter.sendMail(message, (err, info) => {
     if (err) {
       console.log('Error occurred. ' + err.message);
