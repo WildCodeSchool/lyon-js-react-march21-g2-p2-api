@@ -97,7 +97,7 @@ app.post('/movies/:tmdb_id/reviews', (req, res) => {
     });
 });
 
-//-------------Created structure for the message---------------//
+// -------------Created structure for the message---------------//
 
 app.post('/contact', (req, res) => {
   const htmlOutput = `
@@ -110,7 +110,7 @@ app.post('/contact', (req, res) => {
   <p>${req.body.text}<p>
 ---------------------------
   `;
-  //------------Create a SMTP transporter object----------------------//
+  // ------------Create a SMTP transporter object----------------------//
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -131,7 +131,7 @@ app.post('/contact', (req, res) => {
   };
   transporter.sendMail(message, (err, info) => {
     if (err) {
-      console.log('Error occurred. ' + err.message);
+      console.log(`Error occurred: ${err.message}`);
       res.sendStatus(500);
     } else {
       console.log('Message sent: %s', info.messageId);
